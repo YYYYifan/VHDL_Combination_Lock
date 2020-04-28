@@ -47,10 +47,8 @@ architecture Behavioral of main is
     signal displayData:     STD_LOGIC_VECTOR (31 downto 0);
 begin        
     ButtonsFunction: process(CLK100Hz, RESET_N)        
-        variable rightPassword:     STD_LOGIC_VECTOR (31 downto 0)  
-                                    :=  B"0010_0000_0011_0100_1000_1000_0100_1101"; -- Right password
-        variable securityPassword:  STD_LOGIC_VECTOR (31 downto 0)  
-                                    :=  B"1001_1000_0000_0011_0010_0110_1101_1101"; -- Security pwd
+        variable rightPassword:     STD_LOGIC_VECTOR (31 downto 0)  :=  B"0010_0000_0011_0100_1000_1000_0100_1101"; -- Right password
+        variable securityPassword:  STD_LOGIC_VECTOR (31 downto 0)  :=  B"1001_1000_0000_0011_0010_0110_1101_1101"; -- Security pwd
         variable counter:           STD_LOGIC_VECTOR (7 DOWNTO 0)   :=  (others => '0');        
         variable switchCounter:     STD_LOGIC_VECTOR (7 DOWNTO 0)   :=  (others => '0');
         
