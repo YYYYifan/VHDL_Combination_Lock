@@ -7,7 +7,7 @@
 -- Project Name:    8 bits combination lock
 -- Target Devices:  NEXYS 4 DDR
 -- Tool Versions:   Vivado 2019.2
--- Description:     Specify output, input.
+-- Description:     Specify output, input and buttons function.
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
