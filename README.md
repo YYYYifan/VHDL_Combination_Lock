@@ -1,9 +1,8 @@
 
-# Digit Design Assigment
+# University of Birmingham, 2020 Digit Design Assigment
 
 ## An Combination Lock
-Using VHDL and implement on Nexys4 DDR
-Design by Yifan Du
+Using VHDL and implement on Nexys4 DDR ,design by Yifan Du
 
 ![avatar](/Figures/board.png)
 
