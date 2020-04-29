@@ -3,9 +3,10 @@
 Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du, Check it on [Github](https://github.com/YYYYifan/Combination_Lock)
 
 ----
-[Hardware Specification](#hardware-specification)
-
-[Button Function Specification](#button-function-specification)
+* [Hardware Specification](#hardware-specification)
+* [Button Function Specification](#button-function-specification)
+* [Theory](#Theory)
+   * [Clock Divider](#Clock-Divider)
 
 ## **Hardware Specification**
 ![avatar](./Figures/board.png)
