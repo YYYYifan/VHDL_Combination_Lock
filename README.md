@@ -112,7 +112,7 @@ case SWITCHES is
     when "0010000000" => inputValue <= B"0111"; -- SWITCHES[7], number 7
     when "0100000000" => inputValue <= B"1000"; -- SWITCHES[8], number 8
     when "1000000000" => inputValue <= B"1001"; -- SWITCHES[9], number 9
-    when others         => null;                                           
+    when others       => null;                                           
 end case;
 
 case digitCounter is           
@@ -205,7 +205,7 @@ case digitData is
     when B"1100" => SEGMENTS(6 downto 0) <= "0101111"; -- r
     when B"1101" => SEGMENTS(6 downto 0) <= "1110111"; -- _
     when B"1111" => SEGMENTS(6 downto 0) <= "1111111"; -- close all segs
-    when others => SEGMENTS(6 downto 0) <= "1111111";
+    when others  => SEGMENTS(6 downto 0) <= "1111111";
 end case;
 ```
 ---
