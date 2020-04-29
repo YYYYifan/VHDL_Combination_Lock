@@ -18,17 +18,17 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity Eight_Digits_Display is
+entity Eight_Digit_Seven_Segment_Display is
 PORT(
-    CLK800Hz:      in      STD_LOGIC;
+    CLK800Hz:       in      STD_LOGIC;
     codeSequence:   in      STD_LOGIC_VECTOR (31 downto 0);        
     SEGMENTS:       out     STD_LOGIC_VECTOR (7 downto 0);
     DIGITS:         out     STD_LOGIC_VECTOR (7 downto 0);    
     RESET_N:        in      STD_LOGIC
 );
-end Eight_Digits_Display;
+end Eight_Digit_Seven_Segment_Display;
 
-architecture Behavioral of Eight_Digits_Display is
+architecture Behavioral of Eight_Digit_Seven_Segment_Display is
 begin
     SEGMENTS(7) <= '1'; -- Close decimal point
     process(CLK800Hz, RESET_N)

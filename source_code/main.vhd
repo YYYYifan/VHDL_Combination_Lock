@@ -212,7 +212,7 @@ begin
         RESET_N => RESET_N   
     );
     
-    Go_To_Display: entity work.Eight_Digits_Display(Behavioral) 
+    Go_To_Display: entity work.Eight_Digit_Seven_Segment_Display(Behavioral) 
     PORT MAP(
         CLK800Hz => CLK800Hz,
         codeSequence => codeSequence,        
