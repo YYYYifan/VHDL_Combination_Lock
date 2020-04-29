@@ -4,6 +4,7 @@ Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du
 * [Button Function Specification](#button-function-specification)
 * [Theory](#Theory)
    * [Clock Divider](#Clock-Divider)
+   * [Calculate the Input Number of Digit](#Calculate-the-Input-Number-of-Digit)
    * [8-Digit 7 Segment Display Driver](#8-Digit-7-Segment-Display-Driver)
 ---
 ## **Hardware Specification**
@@ -50,37 +51,52 @@ So, its mean when counter is equal to 500000, we change the "CLK100Hz" e.g: high
 #### Code Implement
 In './source_code/VLK100Hz.Vhd'
 ```VHDL
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
-
-entity main is
-    PORT(
-        CLK100MHZ : in  std_logic;        
-        RESET_N   : in  std_logic
-    );
-end main;
-
-architecture Behavioral of main is
-    signal counter  : std_logic_vector (17 downto 0); -- 500000 in binary has 18 bit
-    signal CLK100Hz : std_logic; -- Create clock
+process(CLK100MHZ, RESET_N)
 begin
-    process(CLK100MHZ, RESET_N)
-    begin
-        if RESET_N = '1' then
-            CLK100Hz <= '0';
-            counter <= (others => '0');     -- clear counter
-        elsif rising_edge(CLK100MHZ) then   
-            if counter = X"7A120" then      -- 500000 in hex
-                counter <= (others => '0');
-                CLK100Hz <= not CLK100Hz;
-            else
-                counter <= counter + "1";
-            end if;
+    if RESET_N = '1' then
+        CLK100Hz <= '0';
+        counter <= (others => '0');     -- clear counter
+    elsif rising_edge(CLK100MHZ) then   
+        if counter = X"7A120" then      -- 500000 in hex
+            counter <= (others => '0');
+            CLK100Hz <= not CLK100Hz;
+        else
+            counter <= counter + "1";
         end if;
-    end process;
-end Behavioral;
+    end if;
+end process;
+```
+---
+### **Calculate the Input Number of Digit**
+It is import to confirm number of digit, in this system, push one swith up its means input one number, so i can use switch to create a clock used to counter how many digit i input.
+
+Push up anyone of switches, create high-level of clock, and push down or doing nothing, create low-level clock.
+
+Create clock by switches -- CLK_Switches
+```vhdl
+if SWITCHES /= "0" then         -- When anyone switches has been pushed up
+    CLK_Switches_Local <= '1';  -- HIGH-level 
+elsif SWITCHES = "0" then       -- Push down
+    CLK_Switches_Local <= '0';  -- Low-level
+end if;
+```
+Count input digit by using CLK_Switches
+```vhdl
+process(CLK_Switches, RESET_N)
+begin
+    if RESET_N = '0' then                      
+        digitCounter_Local <= (others => '0');
+    elsif rising_edge(CLK_Switches) then -- Counter     
+        if clearData = TRUE then
+            digitCounter_Local <= (others => '0');       
+        elsif allowInput = TRUE then -- initial and cancel                                                                                                                                                                                                  
+            digitCounter_Local <= digitCounter_Local + '1';
+            if digitCounter_Local = B"1000"then
+                digitCounter_Local <= (others => '0');                    
+            end if;                            
+        end if;                                                        
+    end if;                
+end process;
 ```
 ---
 ### **8-Digit 7 Segment Display Driver**
@@ -110,92 +126,55 @@ Because it is common anode digital tube, so high-level is turn off, low-level is
 
 #### Code Implement
 In './source_code/Eight_Digit_Seven_Segment_Display.Vhd'
-```VHDL
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.NUMERIC_STD.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+```VHDL                        
+case digitIndex is -- switch DIGITS and select bit
+    when B"0000"  =>  -- Bit 0
+        DIGITS <= "11111110";
+        digitData := codeSequence(3 downto 0);                                        
+    when B"0001"  =>  -- Bit 1
+        DIGITS <= "11111101";
+        digitData := codeSequence(7 downto 4);                                            
+    when B"0010"  =>  -- Bit 2
+        DIGITS <= "11111011";
+        digitData := codeSequence(11 downto 8);
+    when B"0011"  =>  -- Bit 3
+        DIGITS <= "11110111";
+        digitData := codeSequence(15 downto 12); 
+    when B"0100"  =>  -- Bit 4
+        DIGITS <= "11101111";
+        digitData := codeSequence(19 downto 16);
+    when B"0101"  =>  -- Bit 5
+        DIGITS <= "11011111"; 
+        digitData := codeSequence(23 downto 20);
+    when B"0110"  =>  -- Bit 6
+        DIGITS <= "10111111"; 
+        digitData := codeSequence(27 downto 24);
+    when B"0111"  =>  -- Bit 7
+        DIGITS <= "01111111";
+        digitData := codeSequence(31 downto 28);                          
+    when others  => 
+        DIGITS <= "11111111";
+        digitData := "1111";                                             
+end case;
 
-entity Eight_Digit_Seven_Segment_Display is
-PORT(
-    CLK800Hz:       in      STD_LOGIC;  -- Scan frequency
-    codeSequence:   in      STD_LOGIC_VECTOR (31 downto 0); -- Data
-    SEGMENTS:       out     STD_LOGIC_VECTOR (7 downto 0);
-    DIGITS:         out     STD_LOGIC_VECTOR (7 downto 0);    
-    RESET_N:        in      STD_LOGIC
-);
-end Eight_Digit_Seven_Segment_Display;
-
-architecture Behavioral of Eight_Digit_Seven_Segment_Display is
-begin
-    SEGMENTS(7) <= '1'; -- Close decimal point
-    process(CLK800Hz, RESET_N)
-        variable  digitIndex: STD_LOGIC_VECTOR(3 downto 0) := (others => '0'); 
-        variable  digitData:  STD_LOGIC_VECTOR(3 downto 0) := (others => '1');
-    begin
-        if RESET_N = '0' then
-            digitIndex := B"0000";
-            DIGITS <= "11111111";
-            digitData := "1111"; 
-        elsif rising_edge(CLK800Hz) then            
-            digitIndex := digitIndex + '1';
-            if digitIndex =B"1000" then
-                digitIndex := (others => '0');
-            end if;                        
-                        
-            case digitIndex is -- switch DIGITS and select bit
-                when B"0000"  =>  -- Bit 0
-                    DIGITS <= "11111110";
-                    digitData := codeSequence(3 downto 0);                                        
-                when B"0001"  =>  -- Bit 1
-                    DIGITS <= "11111101";
-                    digitData := codeSequence(7 downto 4);                                            
-                when B"0010"  =>  -- Bit 2
-                    DIGITS <= "11111011";
-                    digitData := codeSequence(11 downto 8);
-                when B"0011"  =>  -- Bit 3
-                    DIGITS <= "11110111";
-                    digitData := codeSequence(15 downto 12); 
-                when B"0100"  =>  -- Bit 4
-                    DIGITS <= "11101111";
-                    digitData := codeSequence(19 downto 16);
-                when B"0101"  =>  -- Bit 5
-                    DIGITS <= "11011111"; 
-                    digitData := codeSequence(23 downto 20);
-                when B"0110"  =>  -- Bit 6
-                    DIGITS <= "10111111"; 
-                    digitData := codeSequence(27 downto 24);
-                when B"0111"  =>  -- Bit 7
-                    DIGITS <= "01111111";
-                    digitData := codeSequence(31 downto 28);                          
-                when others  => 
-                    DIGITS <= "11111111";
-                    digitData := "1111";                                             
-            end case;
-            
-            case digitData is
-                when B"0000" => SEGMENTS(6 downto 0) <= "1000000"; -- 0, ok
-                when B"0001" => SEGMENTS(6 downto 0) <= "1111001"; -- 1
-                when B"0010" => SEGMENTS(6 downto 0) <= "0100100"; -- 2
-                when B"0011" => SEGMENTS(6 downto 0) <= "0110000"; -- 3
-                when B"0100" => SEGMENTS(6 downto 0) <= "0011001"; -- 4
-                when B"0101" => SEGMENTS(6 downto 0) <= "0010010"; -- 5
-                when B"0110" => SEGMENTS(6 downto 0) <= "0000010"; -- 6
-                when B"0111" => SEGMENTS(6 downto 0) <= "1111000"; -- 7
-                when B"1000" => SEGMENTS(6 downto 0) <= "0000000"; -- 8
-                when B"1001" => SEGMENTS(6 downto 0) <= "0010000"; -- 9
-                
-                when B"1010" => SEGMENTS(6 downto 0) <= "0001001"; -- K, ok
-                when B"1011" => SEGMENTS(6 downto 0) <= "0000110"; -- E
-                when B"1100" => SEGMENTS(6 downto 0) <= "0101111"; -- r
-                when B"1101" => SEGMENTS(6 downto 0) <= "1110111"; -- _
-                when B"1111" => SEGMENTS(6 downto 0) <= "1111111"; -- close all segs
-                when others => SEGMENTS(6 downto 0) <= "1111111";
-            end case;
-        end if;
-    end process;
-
-end Behavioral;
+case digitData is
+    when B"0000" => SEGMENTS(6 downto 0) <= "1000000"; -- 0, ok
+    when B"0001" => SEGMENTS(6 downto 0) <= "1111001"; -- 1
+    when B"0010" => SEGMENTS(6 downto 0) <= "0100100"; -- 2
+    when B"0011" => SEGMENTS(6 downto 0) <= "0110000"; -- 3
+    when B"0100" => SEGMENTS(6 downto 0) <= "0011001"; -- 4
+    when B"0101" => SEGMENTS(6 downto 0) <= "0010010"; -- 5
+    when B"0110" => SEGMENTS(6 downto 0) <= "0000010"; -- 6
+    when B"0111" => SEGMENTS(6 downto 0) <= "1111000"; -- 7
+    when B"1000" => SEGMENTS(6 downto 0) <= "0000000"; -- 8
+    when B"1001" => SEGMENTS(6 downto 0) <= "0010000"; -- 9
+    
+    when B"1010" => SEGMENTS(6 downto 0) <= "0001001"; -- K, ok
+    when B"1011" => SEGMENTS(6 downto 0) <= "0000110"; -- E
+    when B"1100" => SEGMENTS(6 downto 0) <= "0101111"; -- r
+    when B"1101" => SEGMENTS(6 downto 0) <= "1110111"; -- _
+    when B"1111" => SEGMENTS(6 downto 0) <= "1111111"; -- close all segs
+    when others => SEGMENTS(6 downto 0) <= "1111111";
+end case;
 ```
 ---
