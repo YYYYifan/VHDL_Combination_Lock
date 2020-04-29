@@ -3,8 +3,11 @@
 Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du, Check it on [Github](https://github.com/YYYYifan/Combination_Lock)
 
 ----
+[Hardware Specification](#hardware-specification)
 
-## Hardware Specification
+[Button Function Specification](#button-function-specification)
+
+## **Hardware Specification**
 ![avatar](./Figures/board.png)
 - **RESET**: Reset all value, code sequence and password
 
@@ -20,11 +23,10 @@ Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du, Check it on
 - **Switches**: Push up then push down same switch, its means input one number   
    - *e.g*: push up switch [4] then push down, its means input deciaml number 4
 
-
 ----
 
-## Button Function Specification
+## **Button Function Specification**
 ![avatar](./Figures/Button_Specification.png)
 
 > Input whole code sequence then push confirm (center) button 
->> *e.g* Input code sequence 0123, switch[0]-up-down -> switch[1]-up-down -> switch[2]-up-down -> switch[3]-up-down -> confirm
+>> *e.g* Input code sequence 0123, switch[0]-up-down -> switch[1]-up-down -> switch[2]-up-down -> switch[3]-up-down
