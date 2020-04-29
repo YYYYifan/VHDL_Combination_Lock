@@ -108,5 +108,7 @@ Because it is common anode digital tube, so high-level is turn off, low-level is
 |E|0|0|0|0|1|1|0|
 |r|0|1|0|1|1|1|1|
 |_|1|1|1|0|1|1|1|
+
+
 I use 8 digits 7 segments display to show input code sequence and result "Err" / "Ok"
 
