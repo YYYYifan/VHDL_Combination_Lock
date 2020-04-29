@@ -92,7 +92,7 @@ It can not display a different number in the same time, basically, we use a scan
 Because it is common anode digital tube, so high-level is turn off, low-level is turn on
 
 |Number|A|B|C|D|E|F|G|
-|:-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|-|-|-|-|-|-|-|-|
 |None|1|1|1|1|1|1|1|
 |0/O|1|0|0|0|0|0|0|
 |1|1|1|1|1|0|0|1|
