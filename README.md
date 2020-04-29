@@ -4,6 +4,7 @@ Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du
 * [Button Function Specification](#button-function-specification)
 * [Theory](#Theory)
    * [Clock Divider](#Clock-Divider)
+   * [Switches to Decimal Number](#Switches-to-Decimal-Number)
    * [Calculate the Input Number of Digit](#Calculate-the-Input-Number-of-Digit)
    * [8-Digit 7 Segment Display Driver](#8-Digit-7-Segment-Display-Driver)
 ---
@@ -67,6 +68,27 @@ begin
 end process;
 ```
 ---
+### **Switches to Decimal Number**
+We use swithces to indicate input decimal number, instead of binary number
+
+Swithch[0] to Switch[9] <--> decimal 0 to 9
+```vhdl
+case SWITCHES is 
+    when "0000000000" => null;
+    when "0000000001" => inputValue <= B"0000"; -- SWITCHES[0], number 0
+    when "0000000010" => inputValue <= B"0001"; -- SWITCHES[1], number 1
+    when "0000000100" => inputValue <= B"0010"; -- SWITCHES[2], number 2
+    when "0000001000" => inputValue <= B"0011"; -- SWITCHES[3], number 3
+    when "0000010000" => inputValue <= B"0100"; -- SWITCHES[4], number 4
+    when "0000100000" => inputValue <= B"0101"; -- SWITCHES[5], number 5
+    when "0001000000" => inputValue <= B"0110"; -- SWITCHES[6]，number 6
+    when "0010000000" => inputValue <= B"0111"; -- SWITCHES[7], number 7
+    when "0100000000" => inputValue <= B"1000"; -- SWITCHES[8], number 8
+    when "1000000000" => inputValue <= B"1001"; -- SWITCHES[9], number 9
+    when others       => null;                                           
+end case;
+```
+---
 ### **Calculate the Input Number of Digit**
 It is import to confirm number of digit, in this system, push one swith up its means input one number, so i can use switch to create a clock used to counter how many digit i input.
 
@@ -100,21 +122,6 @@ end process;
 ```
 Use digitCounter to determine number <-> digit
 ``` vhdl
-case SWITCHES is 
-    when "0000000000" => null;
-    when "0000000001" => inputValue <= B"0000"; -- SWITCHES[0], number 0
-    when "0000000010" => inputValue <= B"0001"; -- SWITCHES[1], number 1
-    when "0000000100" => inputValue <= B"0010"; -- SWITCHES[2], number 2
-    when "0000001000" => inputValue <= B"0011"; -- SWITCHES[3], number 3
-    when "0000010000" => inputValue <= B"0100"; -- SWITCHES[4], number 4
-    when "0000100000" => inputValue <= B"0101"; -- SWITCHES[5], number 5
-    when "0001000000" => inputValue <= B"0110"; -- SWITCHES[6]，number 6
-    when "0010000000" => inputValue <= B"0111"; -- SWITCHES[7], number 7
-    when "0100000000" => inputValue <= B"1000"; -- SWITCHES[8], number 8
-    when "1000000000" => inputValue <= B"1001"; -- SWITCHES[9], number 9
-    when others       => null;                                           
-end case;
-
 case digitCounter is           
     when "0000" => codeSequence_Local <= B"1101_1101_1101_1101_1101_1101_1101_1101";                                                             
     when "0001" => codeSequence_Local (31 downto 28)   <= inputValue;    
