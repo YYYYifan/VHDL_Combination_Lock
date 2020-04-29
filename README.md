@@ -55,10 +55,10 @@ So, its mean when counter is equal to 500000, we change the "CLK100Hz" e.g: high
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
-use ieee.std_logic_unsigned.all;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity main is
-    port (
+    PORT(
         CLK100MHZ : in  std_logic;        
         RESET_N   : in  std_logic
     );
@@ -68,13 +68,13 @@ architecture Behavioral of main is
     signal counter  : std_logic_vector (17 downto 0); -- 500000 in binary has 18 bit
     signal CLK100Hz : std_logic; -- Create clock
 begin
-    process (CLK100MHZ, RESET_N)
+    process(CLK100MHZ, RESET_N)
     begin
         if RESET_N = '1' then
             CLK100Hz <= '0';
-            counter <= (others => '0');
+            counter <= (others => '0');     -- clear counter
         elsif rising_edge(CLK100MHZ) then   
-            if counter = X"7A120" then     -- 500000 in hex
+            if counter = X"7A120" then      -- 500000 in hex
                 counter <= (others => '0');
                 CLK100Hz <= not CLK100Hz;
             else
@@ -82,6 +82,5 @@ begin
             end if;
         end if;
     end process;
-
 end Behavioral;
 ```
