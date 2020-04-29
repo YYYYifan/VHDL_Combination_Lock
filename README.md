@@ -48,7 +48,7 @@ if we want create 100Hz clock by using 100MHz clock, so the counter limit we nee
 So, its mean when counter is equal to 500000, we change the "CLK100Hz" e.g: high-level -> low-level
 5000000 in hex is 7A120, and has 18 bit in binary
 
-## Code Implement
+#### Code Implement
 
 ```VHDL
 library IEEE;
