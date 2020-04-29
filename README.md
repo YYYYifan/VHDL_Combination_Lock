@@ -1,6 +1,8 @@
 
 # University of Birmingham, 2020 Digit Design Assigment: An Combination Lock
-Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du
+Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du, Check it on [Github](https://github.com/YYYYifan/Combination_Lock)
+
+----
 
 ## Hardware Specification
 ![avatar](./Figures/board.png)
@@ -18,9 +20,11 @@ Using VHDL language and implement on Nexys4 DDR ,design by Yifan Du
 - **Switches**: Push up then push down same switch, its means input one number   
    - *e.g*: push up switch [4] then push down, its means input deciaml number 4
 
-**input whole code sequence then push confirm (center) button**
+
+----
+
 ## Button Function Specification
 ![avatar](./Figures/Button_Specification.png)
 
-
-Use switches to input code sequence, push up and push down same switch mean input one number
+> Input whole code sequence then push confirm (center) button 
+>> *e.g* Input code sequence 0123, switch[0]-up-down -> switch[1]-up-down -> switch[2]-up-down -> switch[3]-up-down -> confirm
