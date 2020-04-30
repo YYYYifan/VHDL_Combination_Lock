@@ -37,6 +37,7 @@ Right password: 2034884
 Security password: 980326
 
 Code sequence max length is 8-digitc(Because 8-digit 7 segment display)
+
 ----
 ## **Theory**
 ### **Clock Divider**
