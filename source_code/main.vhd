@@ -162,7 +162,7 @@ begin
     PORT MAP(
         CLK100MHZ => CLK100MHZ,
         RESET_N => RESET_N,
-        CLK800Hz => CLK_800Hz
+        CLK800Hz => CLK800Hz
     );
     
     Create_CLK100Hz: entity work.CLK100Hz(Behavioral) 
